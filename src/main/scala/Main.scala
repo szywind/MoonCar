@@ -1,11 +1,7 @@
-import java.io.File
 import java.util
-
 import akka.actor.{ActorSystem, Props}
-
 import scala.concurrent.duration._
 import com.google.gson.Gson
-import java.util.{LinkedHashMap, Map => JMap}
 import scala.collection.JavaConverters._
 
 import scala.io.Source
@@ -23,7 +19,7 @@ object Main extends App{
         var done = false
 
         // read data
-        val jsonString = Source.fromFile(Main.getClass.getClassLoader.getResource("paths.json").getPath).getLines().mkString
+        val jsonString = Source.fromFile(getClass.getClassLoader.getResource("paths.json").getPath).getLines().mkString
         val gson = new Gson()
         val raw = gson.fromJson(jsonString, (new util.HashMap[String, Object]()).getClass)
         val ncar = raw.get("ncar").toString.toDouble.toInt
@@ -41,7 +37,7 @@ object Main extends App{
         }
 
 
-        // initialize car position,
+        // initialize car's state
         var mooncars = scala.collection.mutable.MutableList[MoonCar]()
         for(path <- paths) {
             mooncars += new MoonCar(path._1, path._2.start, path._2.end, 0, 0, remoteController)
@@ -53,23 +49,6 @@ object Main extends App{
                 500 milliseconds,
                 remoteController,
                 onShow())
-
-//        system.scheduler.scheduleOnce(500 milliseconds){
-//            remoteController ! onShow()
-//        }
-//        // define a scala runnable
-//        class MyThread extends Runnable {
-//            def run {
-//                while(true) {
-//                    // your custom behavior here
-//                    remoteController ! onShow()
-//                }
-//            }
-//        }
-//
-//        // start your runnable thread somewhere later in the code
-//        var thread = new Thread(new MyThread)
-//        thread.start
 
         // simulate car transition
         var t = 0
@@ -83,9 +62,11 @@ object Main extends App{
             t += 1
         }
 
-        // waiting for the info of the last step
-        Thread.sleep(10000)
+        // wait for the update of the status of the last step
+        Thread.sleep(2000)
         cancellable.cancel()
-//        thread.interrupt()
+
+        // shut down the system
+        system.terminate()
     }
 }

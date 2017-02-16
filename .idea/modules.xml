@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MoonCar.iml" filepath="$PROJECT_DIR$/MoonCar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mooncar.iml" filepath="$PROJECT_DIR$/.idea/modules/mooncar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mooncar-build.iml" filepath="$PROJECT_DIR$/.idea/modules/mooncar-build.iml" />
     </modules>
   </component>
 </project>
